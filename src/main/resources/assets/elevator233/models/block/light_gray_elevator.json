@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "elevator233:block/light_gray_elevator"
+  }
+}

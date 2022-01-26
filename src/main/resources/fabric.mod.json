@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "elevator233",
+  "version": "${version}",
+
+  "name": "squid233's Elevator",
+  "description": "The elevators in Minecraft",
+  "authors": [
+    "squid233"
+  ],
+  "contact": {
+    "homepage": "https://over-run.github.io/2022/m/d/wiki-elevator.html",
+    "sources": "https://github.com/squid233/Elevator",
+    "issues": "https://github.com/squid233/Elevator/issues"
+  },
+
+  "license": "MIT",
+  "icon": "assets/elevator233/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.squid233.elevator.ElevatorMod"
+    ],
+    "client": [
+      "io.github.squid233.elevator.client.EModClient"
+    ],
+    "server": [
+      "io.github.squid233.elevator.server.EModServer"
+    ]
+  },
+  "mixins": [
+    "elevator233.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.12.12",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17"
+  }
+}
