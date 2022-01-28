@@ -7,7 +7,9 @@
   ],
   "client": [
     "KeyboardMixin",
-    "PlayerEntityMixin"
+    "ModelLoaderMixin",
+    "PlayerEntityMixin",
+    "RenderLayersAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

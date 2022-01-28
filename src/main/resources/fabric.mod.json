@@ -24,9 +24,6 @@
     ],
     "client": [
       "io.github.squid233.elevator.client.EModClient"
-    ],
-    "server": [
-      "io.github.squid233.elevator.server.EModServer"
     ]
   },
   "mixins": [

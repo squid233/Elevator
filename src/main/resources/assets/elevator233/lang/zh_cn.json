@@ -15,5 +15,16 @@
   "block.elevator233.green_elevator": "绿色电梯",
   "block.elevator233.red_elevator": "红色电梯",
   "block.elevator233.black_elevator": "黑色电梯",
+
+  "elevator233.subtitle.teleport": "电梯：使用",
+  "elevator233.subtitle.camouflage": "电梯：伪装",
+
+  "screen.elevator233.elevator": "电梯选项",
+  "screen.elevator233.elevator.directional": "固定方向",
+  "screen.elevator233.elevator.hide_arrow": "隐藏指向箭头",
+  "screen.elevator233.elevator.reset_camo": "移除伪装",
+
+  "elevator233.message.missing_xp": "你的经验不够传送",
+
   "itemGroup.elevator233.main": "squid233的电梯"
 }

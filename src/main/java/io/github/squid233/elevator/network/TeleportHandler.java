@@ -1,16 +1,24 @@
 package io.github.squid233.elevator.network;
 
 import io.github.squid233.elevator.block.ElevatorBlock;
+import io.github.squid233.elevator.config.EModConfigs;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldView;
 
 import java.util.Arrays;
+
+import static io.github.squid233.elevator.block.ElevatorBlock.DIRECTIONAL;
+import static java.lang.Math.round;
+import static net.minecraft.block.HorizontalFacingBlock.FACING;
 
 /**
  * @author squid233
@@ -21,14 +29,49 @@ public class TeleportHandler {
         if (isBadTeleportPacket(req, player))
             return;
 
+        if (EModConfigs.configurator.isUseXP() && !player.isCreative()) {
+            int xpCost = EModConfigs.configurator.getXpPointsAmount();
+            if (getPlayerExperienceProgress(player) - xpCost >= 0 || player.experienceLevel > 0) {
+                player.addExperience(-xpCost);
+            } else {
+                player.sendSystemMessage(
+                    new TranslatableText("elevator.message.missing_xp")
+                        .formatted(Formatting.RED),
+                    player.getUuid()
+                );
+            }
+        }
+
         var world = player.getWorld();
         var toPos = req.to();
         var toState = world.getBlockState(req.to());
 
+        final float yaw = toState.get(DIRECTIONAL)
+            ? toState.get(FACING).asRotation()
+            : player.getYaw();
+        final float pitch = ((toState.get(DIRECTIONAL) && EModConfigs.configurator.isResetPitchDirectional())
+            || (!toState.get(DIRECTIONAL) && EModConfigs.configurator.isResetPitchNormal()))
+            ? 0
+            : player.getPitch();
+
+        final double toX, toZ;
+        if (EModConfigs.configurator.isPrecisionTarget()) {
+            toX = toPos.getX() + 0.5;
+            toZ = toPos.getZ() + 0.5;
+        } else {
+            toX = player.getX();
+            toZ = player.getZ();
+        }
+
         var blockYOffset = toState.getCollisionShape(world, toPos).getMax(Direction.Axis.Y);
-        player.teleport(world, player.getX(), toPos.getY() + blockYOffset, player.getZ(), player.getYaw(), player.getPitch());
+        player.teleport(world, toX, toPos.getY() + blockYOffset, toZ, yaw, pitch);
         player.setVelocity(player.getVelocity().multiply(1, 0, 1));
-        world.playSound(null, toPos, SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 1, 1);
+        world.playSound(null,
+            toPos,
+            SoundEvents.ENTITY_ENDERMAN_TELEPORT,
+            SoundCategory.BLOCKS,
+            1,
+            1);
     }
 
     private static boolean isBadTeleportPacket(TeleportRequest req, ServerPlayerEntity player) {
@@ -48,7 +91,12 @@ public class TeleportHandler {
         return fromElevator == null
             || toElevator == null
             || !isBlocked(world, toPos)
-            || fromElevator.getDefaultMapColor() != toElevator.getDefaultMapColor();
+            || (EModConfigs.configurator.isSameColor()
+            && fromElevator.getColor() != toElevator.getColor());
+    }
+
+    private static int getPlayerExperienceProgress(PlayerEntity player) {
+        return round(player.experienceProgress * player.getNextLevelExperience());
     }
 
     public static boolean isBlocked(WorldView world, BlockPos target) {

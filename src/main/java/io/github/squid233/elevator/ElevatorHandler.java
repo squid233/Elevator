@@ -1,14 +1,16 @@
 package io.github.squid233.elevator;
 
 import io.github.squid233.elevator.block.ElevatorBlock;
-import io.github.squid233.elevator.network.EModNetworkingConstants;
+import io.github.squid233.elevator.config.EModConfigs;
+import io.github.squid233.elevator.network.NetworkHandler;
 import io.github.squid233.elevator.network.TeleportHandler;
 import io.github.squid233.elevator.network.TeleportRequest;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+
+import static io.github.squid233.elevator.network.EModNetworkingConstants.TELEPORT_PACKET_ID;
+import static java.lang.Math.abs;
 
 /**
  * @author squid233
@@ -28,15 +30,19 @@ public class ElevatorHandler {
 
         while (true) {
             toPos.setY(toPos.getY() + facing.getOffsetY());
-            if (world.isOutOfHeightLimit(toPos))
+            if (world.isOutOfHeightLimit(toPos)
+                || abs(toPos.getY() - fromPos.getY()) > EModConfigs.configurator.getRange())
                 break;
 
             var elevator = TeleportHandler.getElevator(world.getBlockState(toPos));
             if (elevator != null && TeleportHandler.isBlocked(world, toPos)) {
-                if (fromElevator.getDefaultMapColor() == elevator.getDefaultMapColor()) {
-                    var buf = PacketByteBufs.create();
-                    TeleportRequest.encode(new TeleportRequest(fromPos, toPos), buf);
-                    ClientPlayNetworking.send(EModNetworkingConstants.TELEPORT_PACKET_ID, buf);
+                if (!EModConfigs.configurator.isSameColor()
+                    || fromElevator.getColor() == elevator.getColor()) {
+                    NetworkHandler.sendToServer(
+                        TELEPORT_PACKET_ID,
+                        new TeleportRequest(fromPos, toPos),
+                        TeleportRequest::encode
+                    );
                     break;
                 }
             }
