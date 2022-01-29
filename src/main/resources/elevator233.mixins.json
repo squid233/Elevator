@@ -7,7 +7,6 @@
   ],
   "client": [
     "KeyboardMixin",
-    "ModelLoaderMixin",
     "PlayerEntityMixin",
     "RenderLayersAccessor"
   ],

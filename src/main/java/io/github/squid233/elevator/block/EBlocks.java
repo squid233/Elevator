@@ -31,7 +31,7 @@ public class EBlocks {
     public static final ElevatorBlock GREEN_ELEVATOR = elevator(GREEN);
     public static final ElevatorBlock RED_ELEVATOR = elevator(RED);
     public static final ElevatorBlock BLACK_ELEVATOR = elevator(BLACK);
-    public static final ArrowBlock ARROW = register("arrow", new ArrowBlock(FabricBlockSettings.of(Material.AIR)));
+    public static final Block ARROW = register("arrow", new Block(FabricBlockSettings.of(Material.AIR)));
     public static final ElevatorBlock[] ELEVATOR_BLOCKS_ARRAY = {
         WHITE_ELEVATOR,
         ORANGE_ELEVATOR,

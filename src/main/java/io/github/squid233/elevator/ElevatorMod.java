@@ -1,17 +1,26 @@
 package io.github.squid233.elevator;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.github.squid233.elevator.block.EBlocks;
 import io.github.squid233.elevator.block.entity.EBlockEntityTypes;
 import io.github.squid233.elevator.block.entity.ESHTypes;
-import io.github.squid233.elevator.config.EModConfigs;
 import io.github.squid233.elevator.item.EItems;
 import io.github.squid233.elevator.network.NetworkHandler;
 import net.fabricmc.api.ModInitializer;
-import org.apache.commons.io.IOExceptionList;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.minecraft.server.command.ServerCommandSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import java.util.function.Consumer;
+
+import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
+import static com.mojang.brigadier.arguments.BoolArgumentType.bool;
+import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
+import static io.github.squid233.elevator.config.Configurator.*;
+import static io.github.squid233.elevator.config.EModConfigs.*;
+import static net.minecraft.server.command.CommandManager.argument;
+import static net.minecraft.server.command.CommandManager.literal;
 
 /**
  * @author squid233
@@ -30,7 +39,75 @@ public class ElevatorMod implements ModInitializer {
         ESHTypes.register();
         NetworkHandler.init();
         LOGGER.debug("Registered all objects");
-        EModConfigs.loadAllCfg();
+        loadAllCfg();
+        registerCmd();
         LOGGER.debug("Common side: done");
+    }
+
+    private static void registerCmd() {
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
+                var set = literal("set");
+                var reset = literal("reset");
+                var cfg = literal("config");
+
+                setCfg(set, reset, "sameColor", DEF_SAME_COLOR, configurator::setSameColor);
+                setCfg(set, reset, "range", DEF_RANGE, 3, 4064, configurator::setRange);
+                setCfg(set, reset, "precisionTarget", DEF_PRECISION_TARGET, configurator::setPrecisionTarget);
+                setCfg(set, reset, "resetPitchNormal", DEF_RESET_PITCH_NORMAL, configurator::setResetPitchNormal);
+                setCfg(set, reset, "resetPitchDirectional", DEF_RESET_PITCH_DIRECTIONAL, configurator::setResetPitchDirectional);
+                setCfg(set, reset, "useXP", DEF_USE_XP, configurator::setUseXP);
+                setCfg(set, reset, "xpPointsAmount", DEF_XP_POINTS_AMOUNT, 1, Integer.MAX_VALUE, configurator::setXpPointsAmount);
+
+                cfg.then(set);
+                cfg.then(reset);
+                cfg.then(literal("reload").executes(ctx -> {
+                    loadAllCfg();
+                    return SINGLE_SUCCESS;
+                }));
+                dispatcher.register(
+                    literal("elevator233").then(cfg)
+                );
+            }
+        );
+    }
+
+    private static String toBoolStr(String s) {
+        final var ca = s.toCharArray();
+        if (ca[0] >= 'a' && ca[0] <= 'z')
+            ca[0] -= 32;
+        return new String(ca);
+    }
+
+    private static void setCfg(LiteralArgumentBuilder<ServerCommandSource> set,
+                               LiteralArgumentBuilder<ServerCommandSource> reset,
+                               String cmd,
+                               int defValue,
+                               int min,
+                               int max,
+                               Consumer<Integer> consumer) {
+        var intCmd = cmd + "I";
+        set.then(literal(cmd).then(argument(intCmd, integer(min, max)).executes(ctx ->
+            setCfg(ctx.getArgument(intCmd, int.class), consumer))));
+        reset.then(literal(cmd).executes(ctx ->
+            setCfg(defValue, consumer)));
+    }
+
+    private static void setCfg(LiteralArgumentBuilder<ServerCommandSource> set,
+                               LiteralArgumentBuilder<ServerCommandSource> reset,
+                               String cmd,
+                               boolean defValue,
+                               Consumer<Boolean> consumer) {
+        var boolCmd = "is" + toBoolStr(cmd);
+        set.then(literal(cmd).then(argument(boolCmd, bool()).executes(ctx ->
+            setCfg(ctx.getArgument(boolCmd, boolean.class), consumer))));
+        reset.then(literal(cmd).executes(ctx ->
+            setCfg(defValue, consumer)));
+    }
+
+    private static <T> int setCfg(T value,
+                                  Consumer<T> consumer) {
+        consumer.accept(value);
+        writeAllCfg();
+        return SINGLE_SUCCESS;
     }
 }

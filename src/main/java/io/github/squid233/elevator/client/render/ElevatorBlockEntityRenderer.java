@@ -6,14 +6,14 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory.Context;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3f;
 
 import java.util.Random;
 
 import static io.github.squid233.elevator.block.ElevatorBlock.DIRECTIONAL;
 import static io.github.squid233.elevator.block.ElevatorBlock.SHOW_ARROW;
-import static io.github.squid233.elevator.util.BlockRenderLayers.canRenderInLayer;
 import static net.minecraft.block.HorizontalFacingBlock.FACING;
-import static net.minecraft.client.render.RenderLayer.getBlockLayers;
 import static net.minecraft.client.render.RenderLayer.getCutoutMipped;
 import static net.minecraft.client.render.RenderLayers.getBlockLayer;
 
@@ -36,30 +36,35 @@ public record ElevatorBlockEntityRenderer(Context context) implements BlockEntit
         var world = entity.getWorld();
         var pos = entity.getPos();
         if (world != null) {
-            if (state.get(DIRECTIONAL) && state.get(SHOW_ARROW))
-                renderMgr.renderBlock(EBlocks.ARROW.getDefaultState()
-                        .with(FACING, state.get(FACING)),
+            if (state.get(DIRECTIONAL) && state.get(SHOW_ARROW)) {
+                matrices.push();
+                matrices.translate(0.5, 0, 0.5);
+                matrices.multiply(Quaternion.fromEulerXyzDegrees(
+                        new Vec3f(0,
+                            ((4 - state.get(FACING).getHorizontal()) & 3) * 90,
+                            0)
+                    )
+                );
+                matrices.translate(-0.5, 0, -0.5);
+                renderMgr.renderBlock(EBlocks.ARROW.getDefaultState(),
                     pos,
                     world,
                     matrices,
                     vertexConsumers.getBuffer(getCutoutMipped()),
                     false,
                     new Random());
+                matrices.pop();
+            }
 
             var heldState = entity.getHeldState();
-            for (var layer : getBlockLayers()) {
-                if (heldState != null
-                    && canRenderInLayer(heldState, layer)) {
-                    renderMgr.renderBlock(heldState,
-                        pos,
-                        world,
-                        matrices,
-                        vertexConsumers.getBuffer(getBlockLayer(heldState)),
-                        true,
-                        new Random());
-                    break;
-                }
-            }
+            if (heldState != null)
+                renderMgr.renderBlock(heldState,
+                    pos,
+                    world,
+                    matrices,
+                    vertexConsumers.getBuffer(getBlockLayer(heldState)),
+                    true,
+                    new Random());
         }
 
         matrices.pop();

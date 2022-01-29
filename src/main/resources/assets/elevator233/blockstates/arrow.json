@@ -1,16 +1,7 @@
 {
   "variants": {
-    "facing=north": {
-      "model": "elevator233:block/arrow_north"
-    },
-    "facing=south": {
-      "model": "elevator233:block/arrow_south"
-    },
-    "facing=west": {
-      "model": "elevator233:block/arrow_west"
-    },
-    "facing=east": {
-      "model": "elevator233:block/arrow_east"
+    "": {
+      "model": "elevator233:block/arrow"
     }
   }
 }

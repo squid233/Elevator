@@ -129,26 +129,26 @@ public class ElevatorBlockEntity
             return false;
         var originalState = heldState;
         setHeldState(newState);
-        if (getWorld() != null) {
-            if (originalState != null) {
-                var group = originalState.getSoundGroup();
-                getWorld().playSound(null,
-                    getPos(),
-                    group.getBreakSound(),
-                    SoundCategory.BLOCKS,
-                    group.volume,
-                    group.pitch);
-            }
-            if (newState != null) {
+        if (getWorld() != null)
+            if (newState == null) {
+                if (originalState != null) {
+                    var group = originalState.getSoundGroup();
+                    getWorld().playSound(null,
+                        getPos(),
+                        group.getBreakSound(),
+                        SoundCategory.BLOCKS,
+                        group.volume,
+                        group.pitch);
+                }
+            } else {
                 var group = newState.getSoundGroup();
                 getWorld().playSound(null,
                     getPos(),
-                    group.getBreakSound(),
+                    group.getPlaceSound(),
                     SoundCategory.BLOCKS,
                     group.volume,
                     group.pitch);
             }
-        }
         return true;
     }
 

@@ -95,10 +95,13 @@ public class ElevatorBlock extends HorizontalFacingBlock implements BlockEntityP
             be.setCamoAndUpdate(null);
             return ActionResult.SUCCESS;
         }
-        var factory = state.createScreenHandlerFactory(world, pos);
-        if (factory != null)
-            player.openHandledScreen(factory);
-        return ActionResult.SUCCESS;
+        if (player.isCreativeLevelTwoOp()) {
+            var factory = state.createScreenHandlerFactory(world, pos);
+            if (factory != null)
+                player.openHandledScreen(factory);
+            return ActionResult.SUCCESS;
+        }
+        return ActionResult.PASS;
     }
 
 

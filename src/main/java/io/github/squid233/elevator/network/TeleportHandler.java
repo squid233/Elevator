@@ -35,10 +35,11 @@ public class TeleportHandler {
                 player.addExperience(-xpCost);
             } else {
                 player.sendSystemMessage(
-                    new TranslatableText("elevator.message.missing_xp")
+                    new TranslatableText("elevator233.message.missing_xp")
                         .formatted(Formatting.RED),
                     player.getUuid()
                 );
+                return;
             }
         }
 

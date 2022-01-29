@@ -13,37 +13,44 @@ import static net.minecraft.util.math.MathHelper.clamp;
  * @since 0.2.0
  */
 public class Configurator {
+    public static final boolean DEF_SAME_COLOR = false;
+    public static final boolean DEF_PRECISION_TARGET = true;
+    public static final boolean DEF_RESET_PITCH_NORMAL = false;
+    public static final boolean DEF_RESET_PITCH_DIRECTIONAL = true;
+    public static final int DEF_RANGE = 384;
+    public static final boolean DEF_USE_XP = false;
+    public static final int DEF_XP_POINTS_AMOUNT = 1;
     /**
      * Should elevators have the same color in order to teleport ?
      */
-    private boolean sameColor = false;
+    private boolean sameColor = DEF_SAME_COLOR;
     /**
      * Realign players to the center of elevator ?
      */
-    private boolean precisionTarget = true;
+    private boolean precisionTarget = DEF_PRECISION_TARGET;
     /**
      * Reset pitch to 0 when teleporting to normal elevators ?
      */
-    private boolean resetPitchNormal = false;
+    private boolean resetPitchNormal = DEF_RESET_PITCH_NORMAL;
     /**
      * Reset pitch to 0 when teleporting to directional elevators ?
      */
-    private boolean resetPitchDirectional = true;
+    private boolean resetPitchDirectional = DEF_RESET_PITCH_DIRECTIONAL;
     /**
      * Elevator range
      */
-    private int range = 384;
+    private int range = DEF_RANGE;
     /**
      * Should teleporting require XP ?
      */
-    private boolean useXP = false;
+    private boolean useXP = DEF_USE_XP;
     /**
      * Amount of XP points to use when useXP is enabled
      * <p>
      * <b>Note</b> this is NOT experience levels
      * </p>
      */
-    private int xpPointsAmount = 1;
+    private int xpPointsAmount = DEF_XP_POINTS_AMOUNT;
 
     public Configurator(boolean sameColor,
                         boolean precisionTarget,
