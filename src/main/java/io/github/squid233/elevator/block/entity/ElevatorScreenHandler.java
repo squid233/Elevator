@@ -1,13 +1,11 @@
 package io.github.squid233.elevator.block.entity;
 
 import io.github.squid233.elevator.ElevatorMod;
-import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -53,10 +51,7 @@ public class ElevatorScreenHandler extends ScreenHandler {
         return playerFacing;
     }
 
-    public static ScreenHandlerType<ElevatorScreenHandler> registerSHType() {
-        return ScreenHandlerRegistry.registerExtended(
-            new Identifier(ElevatorMod.MOD_ID, "elevator_screen_handler"),
-            ElevatorScreenHandler::new
-        );
+    public static Identifier createSHType() {
+        return new Identifier(ElevatorMod.MOD_ID, "elevator_screen_handler");
     }
 }

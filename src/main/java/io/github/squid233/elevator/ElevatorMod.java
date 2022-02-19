@@ -12,6 +12,7 @@ import net.minecraft.server.command.ServerCommandSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.file.StandardOpenOption;
 import java.util.function.Consumer;
 
 import static com.mojang.brigadier.Command.SINGLE_SUCCESS;
@@ -85,9 +86,8 @@ public class ElevatorMod implements ModInitializer {
                                int min,
                                int max,
                                Consumer<Integer> consumer) {
-        var intCmd = cmd + "I";
-        set.then(literal(cmd).then(argument(intCmd, integer(min, max)).executes(ctx ->
-            setCfg(ctx.getArgument(intCmd, int.class), consumer))));
+        set.then(literal(cmd).then(argument(cmd, integer(min, max)).executes(ctx ->
+            setCfg(ctx.getArgument(cmd, int.class), consumer))));
         reset.then(literal(cmd).executes(ctx ->
             setCfg(defValue, consumer)));
     }
@@ -107,7 +107,7 @@ public class ElevatorMod implements ModInitializer {
     private static <T> int setCfg(T value,
                                   Consumer<T> consumer) {
         consumer.accept(value);
-        writeAllCfg();
+        writeAllCfg(StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
         return SINGLE_SUCCESS;
     }
 }

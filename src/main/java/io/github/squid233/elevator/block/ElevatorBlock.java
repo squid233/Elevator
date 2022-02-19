@@ -7,6 +7,7 @@ import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -67,10 +68,20 @@ public class ElevatorBlock extends HorizontalFacingBlock implements BlockEntityP
         return new ElevatorBlockEntity(pos, state);
     }
 
+    @Override
+    public boolean onSyncedBlockEvent(BlockState state, World world, BlockPos pos, int type, int data) {
+        super.onSyncedBlockEvent(state, world, pos, type, data);
+        var be = world.getBlockEntity(pos);
+        if (be == null)
+            return false;
+        return be.onSyncedBlockEvent(type, data);
+    }
+
     @Nullable
     @Override
-    public ElevatorBlockEntity createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
-        return createBlockEntity(pos, state);
+    public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+        var be = world.getBlockEntity(pos);
+        return be instanceof NamedScreenHandlerFactory f ? f : null;
     }
 
     @Override
