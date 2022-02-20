@@ -26,7 +26,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "jump", at = @At("RETURN"))
     public void jump(CallbackInfo ci) {
-        if (world.isClient && (Object)this instanceof ClientPlayerEntity e) {
+        if (world.isClient && (Object) this instanceof ClientPlayerEntity e) {
             tryTeleport(e, Direction.UP);
         }
     }
