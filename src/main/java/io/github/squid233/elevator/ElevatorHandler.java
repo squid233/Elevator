@@ -1,10 +1,10 @@
 package io.github.squid233.elevator;
 
-import io.github.squid233.elevator.block.ElevatorBlock;
 import io.github.squid233.elevator.config.EModConfigs;
 import io.github.squid233.elevator.network.NetworkHandler;
 import io.github.squid233.elevator.network.TeleportHandler;
 import io.github.squid233.elevator.network.TeleportRequest;
+import net.minecraft.block.Block;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -25,8 +25,8 @@ public class ElevatorHandler {
             return;
 
         var toPos = fromPos.mutableCopy();
-        var fromElevator = (ElevatorBlock) world.getBlockState(fromPos).getBlock();
-        ElevatorBlock toElevator;
+        var fromElevator = world.getBlockState(fromPos).getBlock();
+        Block toElevator;
 
         while (true) {
             toPos.setY(toPos.getY() + facing.getOffsetY());
@@ -37,7 +37,7 @@ public class ElevatorHandler {
             var elevator = TeleportHandler.getElevator(world.getBlockState(toPos));
             if (elevator != null && TeleportHandler.isBlocked(world, toPos)) {
                 if (!EModConfigs.configurator.isSameColor()
-                    || fromElevator.getColor() == elevator.getColor()) {
+                    || fromElevator == elevator) {
                     NetworkHandler.sendToServer(
                         TELEPORT_PACKET_ID,
                         new TeleportRequest(fromPos, toPos),

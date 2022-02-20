@@ -3,8 +3,13 @@ package io.github.squid233.elevator.config;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import net.minecraft.block.Block;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static net.minecraft.util.math.MathHelper.clamp;
 
@@ -51,6 +56,10 @@ public class Configurator {
      * </p>
      */
     private int xpPointsAmount = DEF_XP_POINTS_AMOUNT;
+    /**
+     * The block identifiers. Add any block you want.
+     */
+    private final List<Identifier> blockIds = new ArrayList<>();
 
     public Configurator(boolean sameColor,
                         boolean precisionTarget,
@@ -58,7 +67,8 @@ public class Configurator {
                         boolean resetPitchDirectional,
                         int range,
                         boolean useXP,
-                        int xpPointsAmount) {
+                        int xpPointsAmount,
+                        List<Identifier> blockIds) {
         this.sameColor = sameColor;
         this.precisionTarget = precisionTarget;
         this.resetPitchNormal = resetPitchNormal;
@@ -66,6 +76,7 @@ public class Configurator {
         this.range = clamp(range, 3, 4064);
         this.useXP = useXP;
         this.xpPointsAmount = clamp(xpPointsAmount, 1, Integer.MAX_VALUE);
+        this.blockIds.addAll(blockIds);
     }
 
     public Configurator(Configurator configurator) {
@@ -76,6 +87,7 @@ public class Configurator {
         range = clamp(configurator.range, 3, 4064);
         useXP = configurator.useXP;
         xpPointsAmount = clamp(configurator.xpPointsAmount, 1, Integer.MAX_VALUE);
+        blockIds.addAll(configurator.blockIds);
     }
 
     public Configurator() {
@@ -92,7 +104,10 @@ public class Configurator {
                 .name("resetPitchDirectional").value(value.resetPitchDirectional)
                 .name("useXP").value(value.useXP)
                 .name("xpPointsAmount").value(value.xpPointsAmount)
-                .endObject();
+                .name("customElevators").beginArray();
+            for (var id : value.blockIds)
+                out.value(id.toString());
+            out.endArray().endObject();
         }
 
         @Override
@@ -108,6 +123,13 @@ public class Configurator {
                     case "resetPitchDirectional" -> configurator.resetPitchDirectional = in.nextBoolean();
                     case "useXP" -> configurator.useXP = in.nextBoolean();
                     case "xpPointsAmount" -> configurator.xpPointsAmount = in.nextInt();
+                    case "customElevators" -> {
+                        in.beginArray();
+                        while (in.hasNext()) {
+                            configurator.blockIds.add(new Identifier(in.nextString()));
+                        }
+                        in.endArray();
+                    }
                 }
             }
             in.endObject();
@@ -169,5 +191,17 @@ public class Configurator {
 
     public void setXpPointsAmount(int xpPointsAmount) {
         this.xpPointsAmount = clamp(xpPointsAmount, 1, Integer.MAX_VALUE);
+    }
+
+    public void addCustomElevator(Block block) {
+        blockIds.add(Registry.BLOCK.getId(block));
+    }
+
+    public boolean hasCustomElevator(Block block) {
+        return blockIds.contains(Registry.BLOCK.getId(block));
+    }
+
+    public void clearCustomElevator() {
+        blockIds.clear();
     }
 }

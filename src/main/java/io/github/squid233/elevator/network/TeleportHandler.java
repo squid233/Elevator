@@ -1,7 +1,7 @@
 package io.github.squid233.elevator.network;
 
-import io.github.squid233.elevator.block.ElevatorBlock;
 import io.github.squid233.elevator.config.EModConfigs;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -16,9 +16,7 @@ import net.minecraft.world.WorldView;
 
 import java.util.Arrays;
 
-import static io.github.squid233.elevator.block.ElevatorBlock.DIRECTIONAL;
 import static java.lang.Math.round;
-import static net.minecraft.block.HorizontalFacingBlock.FACING;
 
 /**
  * @author squid233
@@ -47,11 +45,9 @@ public class TeleportHandler {
         var toPos = req.to();
         var toState = world.getBlockState(req.to());
 
-        final float yaw = toState.get(DIRECTIONAL)
-            ? toState.get(FACING).asRotation()
-            : player.getYaw();
-        final float pitch = ((toState.get(DIRECTIONAL) && EModConfigs.configurator.isResetPitchDirectional())
-            || (!toState.get(DIRECTIONAL) && EModConfigs.configurator.isResetPitchNormal()))
+        final float yaw = player.getYaw();
+        final float pitch = (EModConfigs.configurator.isResetPitchDirectional()
+            || EModConfigs.configurator.isResetPitchNormal())
             ? 0
             : player.getPitch();
 
@@ -93,7 +89,7 @@ public class TeleportHandler {
             || toElevator == null
             || !isBlocked(world, toPos)
             || (EModConfigs.configurator.isSameColor()
-            && fromElevator.getColor() != toElevator.getColor());
+            && fromElevator != toElevator);
     }
 
     private static int getPlayerExperienceProgress(PlayerEntity player) {
@@ -112,9 +108,10 @@ public class TeleportHandler {
         return Arrays.stream(states).allMatch(TeleportHandler::validateTarget);
     }
 
-    public static ElevatorBlock getElevator(BlockState state) {
-        if (state.getBlock() instanceof ElevatorBlock elevator)
-            return elevator;
+    public static Block getElevator(BlockState state) {
+        var block = state.getBlock();
+        if (EModConfigs.configurator.hasCustomElevator(block))
+            return block;
         return null;
     }
 }

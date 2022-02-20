@@ -1,13 +1,10 @@
 package io.github.squid233.elevator;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import io.github.squid233.elevator.block.EBlocks;
-import io.github.squid233.elevator.block.entity.EBlockEntityTypes;
-import io.github.squid233.elevator.block.entity.ESHTypes;
-import io.github.squid233.elevator.item.EItems;
 import io.github.squid233.elevator.network.NetworkHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.minecraft.command.argument.BlockStateArgument;
 import net.minecraft.server.command.ServerCommandSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +17,7 @@ import static com.mojang.brigadier.arguments.BoolArgumentType.bool;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static io.github.squid233.elevator.config.Configurator.*;
 import static io.github.squid233.elevator.config.EModConfigs.*;
+import static net.minecraft.command.argument.BlockStateArgumentType.blockState;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -34,10 +32,6 @@ public class ElevatorMod implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.debug("Registering objects");
-        EBlocks.register();
-        EItems.register();
-        EBlockEntityTypes.register();
-        ESHTypes.register();
         NetworkHandler.init();
         LOGGER.debug("Registered all objects");
         loadAllCfg();
@@ -58,6 +52,10 @@ public class ElevatorMod implements ModInitializer {
                 setCfg(set, reset, "resetPitchDirectional", DEF_RESET_PITCH_DIRECTIONAL, configurator::setResetPitchDirectional);
                 setCfg(set, reset, "useXP", DEF_USE_XP, configurator::setUseXP);
                 setCfg(set, reset, "xpPointsAmount", DEF_XP_POINTS_AMOUNT, 1, Integer.MAX_VALUE, configurator::setXpPointsAmount);
+                set.then(literal("customElevator").then(argument("block", blockState()).executes(ctx ->
+                    setCfg(ctx.getArgument("block", BlockStateArgument.class), arg -> configurator.addCustomElevator(arg.getBlockState().getBlock())))));
+                reset.then(literal("customElevator").executes(ctx ->
+                    setCfg(null, t -> configurator.clearCustomElevator())));
 
                 cfg.then(set);
                 cfg.then(reset);

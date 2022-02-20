@@ -1,22 +1,16 @@
 package io.github.squid233.elevator.network;
 
-import io.github.squid233.elevator.block.entity.ElevatorScreenHandler;
-import io.github.squid233.elevator.network.client.RemoveCamoPacket;
-import io.github.squid233.elevator.network.client.SetArrowPacket;
-import io.github.squid233.elevator.network.client.SetDirectionalPacket;
-import io.github.squid233.elevator.network.client.SetFacingPacket;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import static io.github.squid233.elevator.network.EModNetworkingConstants.*;
+import static io.github.squid233.elevator.network.EModNetworkingConstants.TELEPORT_PACKET_ID;
 
 /**
  * @author squid233
@@ -28,26 +22,6 @@ public class NetworkHandler {
             TELEPORT_PACKET_ID,
             TeleportRequest::decode,
             TeleportHandler::handle
-        );
-        register(
-            SET_FACING_PACKET_ID,
-            SetFacingPacket::decode,
-            SetFacingPacket::handle
-        );
-        register(
-            SET_DIRECTIONAL_PACKET_ID,
-            SetDirectionalPacket::decode,
-            SetDirectionalPacket::handle
-        );
-        register(
-            SET_ARROW_PACKET_ID,
-            SetArrowPacket::decode,
-            SetArrowPacket::handle
-        );
-        register(
-            REMOVE_CAMO_PACKET_ID,
-            RemoveCamoPacket::decode,
-            RemoveCamoPacket::handle
         );
     }
 
@@ -69,16 +43,5 @@ public class NetworkHandler {
                 server.execute(() -> handling.accept(msg, player));
             }
         );
-    }
-
-    public static boolean isBadClientPacket(ServerPlayerEntity player, BlockPos pos) {
-        if (player == null || player.isDead() || player.isRemoved())
-            return true;
-        var world = player.getWorld();
-        if (!world.isChunkLoaded(pos))
-            return true;
-        if (!(player.currentScreenHandler instanceof ElevatorScreenHandler handler))
-            return true;
-        return !handler.getPos().equals(pos);
     }
 }
