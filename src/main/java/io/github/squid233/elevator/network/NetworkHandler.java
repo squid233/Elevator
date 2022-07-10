@@ -16,7 +16,7 @@ import static io.github.squid233.elevator.network.EModNetworkingConstants.TELEPO
  * @author squid233
  * @since 0.1.0
  */
-public class NetworkHandler {
+public final class NetworkHandler {
     public static void init() {
         register(
             TELEPORT_PACKET_ID,

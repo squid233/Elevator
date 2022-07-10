@@ -17,7 +17,7 @@ import static net.minecraft.util.math.MathHelper.clamp;
  * @author squid233
  * @since 0.2.0
  */
-public class Configurator {
+public final class Configurator {
     public static final boolean DEF_SAME_COLOR = false;
     public static final boolean DEF_PRECISION_TARGET = true;
     public static final boolean DEF_RESET_PITCH_NORMAL = false;

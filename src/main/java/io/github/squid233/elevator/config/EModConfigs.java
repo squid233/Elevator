@@ -14,7 +14,7 @@ import static java.nio.file.Files.*;
  * @author squid233
  * @since 0.2.0
  */
-public class EModConfigs {
+public final class EModConfigs {
     public static final Path CONFIG_DIR = Path.of("config", "elevator233");
     public static final Path CONFIG_FILE = CONFIG_DIR.resolve("configs.json");
     private static final Gson GSON = new GsonBuilder()
