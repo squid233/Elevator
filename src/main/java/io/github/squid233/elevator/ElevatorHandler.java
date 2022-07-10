@@ -18,7 +18,7 @@ import static java.lang.Math.abs;
  */
 public final class ElevatorHandler {
     public static void tryTeleport(ClientPlayerEntity player, Direction facing) {
-        var world = player.getWorld();
+        var world = player.getEntityWorld();
 
         var fromPos = getOriginElevator(player);
         if (fromPos == null)

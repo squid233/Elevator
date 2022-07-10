@@ -41,7 +41,7 @@ public final class TeleportHandler {
             }
         }
 
-        var world = player.getWorld();
+        var world = player.getServerWorld();
         var toPos = req.to();
         var toState = world.getBlockState(req.to());
 
@@ -74,7 +74,7 @@ public final class TeleportHandler {
     private static boolean isBadTeleportPacket(TeleportRequest req, ServerPlayerEntity player) {
         if (player == null || !player.isAlive())
             return true;
-        var world = player.getWorld();
+        var world = player.getEntityWorld();
         var fromPos = req.from();
         var toPos = req.to();
         if (!world.isChunkLoaded(fromPos) || !world.isChunkLoaded(toPos))
