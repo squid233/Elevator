@@ -22,7 +22,7 @@ public record RemoveCamoPacket(BlockPos pos) {
     public static void handle(RemoveCamoPacket msg, ServerPlayerEntity player) {
         if (NetworkHandler.isBadClientPacket(player, msg.pos))
             return;
-        if (player.getWorld().getBlockEntity(msg.pos) instanceof ElevatorBlockEntity be) {
+        if (player.getEntityWorld().getBlockEntity(msg.pos) instanceof ElevatorBlockEntity be) {
             be.setCamoAndUpdate(null);
         }
     }

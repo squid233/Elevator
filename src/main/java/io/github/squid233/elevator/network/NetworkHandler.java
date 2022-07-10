@@ -74,7 +74,7 @@ public final class NetworkHandler {
     public static boolean isBadClientPacket(ServerPlayerEntity player, BlockPos pos) {
         if (player == null || player.isDead() || player.isRemoved())
             return true;
-        var world = player.getWorld();
+        var world = player.getEntityWorld();
         if (!world.isChunkLoaded(pos))
             return true;
         if (!(player.currentScreenHandler instanceof ElevatorScreenHandler handler))

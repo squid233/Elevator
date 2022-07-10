@@ -24,7 +24,7 @@ public record SetFacingPacket(Direction direction, BlockPos pos) {
     public static void handle(SetFacingPacket msg, ServerPlayerEntity player) {
         if (NetworkHandler.isBadClientPacket(player, msg.pos))
             return;
-        var world = player.getWorld();
+        var world = player.getEntityWorld();
         var state = world.getBlockState(msg.pos);
         if (state.getBlock() instanceof ElevatorBlock) {
             world.setBlockState(msg.pos, state.with(ElevatorBlock.FACING, msg.direction));
