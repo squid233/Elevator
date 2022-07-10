@@ -14,7 +14,7 @@ import static net.minecraft.util.DyeColor.*;
  * @author squid233
  * @since 0.1.0
  */
-public class EBlocks {
+public final class EBlocks {
     public static final ElevatorBlock WHITE_ELEVATOR = elevator(WHITE);
     public static final ElevatorBlock ORANGE_ELEVATOR = elevator(ORANGE);
     public static final ElevatorBlock MAGENTA_ELEVATOR = elevator(MAGENTA);

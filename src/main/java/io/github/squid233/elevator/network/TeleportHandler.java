@@ -24,7 +24,7 @@ import static net.minecraft.block.HorizontalFacingBlock.FACING;
  * @author squid233
  * @since 0.1.0
  */
-public class TeleportHandler {
+public final class TeleportHandler {
     public static void handle(TeleportRequest req, ServerPlayerEntity player) {
         if (isBadTeleportPacket(req, player))
             return;

@@ -16,7 +16,7 @@ import static io.github.squid233.elevator.block.entity.ESHTypes.ELEVATOR_SCREEN_
  * @author squid233
  * @since 0.2.0
  */
-public class ElevatorScreenHandler extends ScreenHandler {
+public final class ElevatorScreenHandler extends ScreenHandler {
     private final Direction playerFacing;
     private ElevatorBlockEntity elevatorBE;
     private final BlockPos pos;

@@ -30,7 +30,7 @@ import static io.github.squid233.elevator.block.entity.EBlockEntityTypes.ELEVATO
  * @author squid233
  * @since 0.2.0
  */
-public class ElevatorBlockEntity
+public final class ElevatorBlockEntity
     extends BlockEntity
     implements ExtendedScreenHandlerFactory {
     @Nullable

@@ -17,7 +17,7 @@ import static io.github.squid233.elevator.network.EModNetworkingConstants.SET_FA
  * @author squid233
  * @since 0.2.0
  */
-class FacingButton extends ButtonWidget {
+final class FacingButton extends ButtonWidget {
     Direction direction;
 
     FacingButton(Point slot, Direction direction, BlockPos pos) {

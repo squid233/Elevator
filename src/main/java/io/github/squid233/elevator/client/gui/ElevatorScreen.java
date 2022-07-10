@@ -26,7 +26,7 @@ import static net.minecraft.block.HorizontalFacingBlock.FACING;
  * @author squid233
  * @since 0.2.0
  */
-public class ElevatorScreen extends HandledScreen<ElevatorScreenHandler> {
+public final class ElevatorScreen extends HandledScreen<ElevatorScreenHandler> {
     private static final Identifier TEXTURE = new Identifier(ElevatorMod.MOD_ID, "textures/gui/elevator_gui.png");
     private final ElevatorBlockEntity be;
     private final Direction playerFacing;

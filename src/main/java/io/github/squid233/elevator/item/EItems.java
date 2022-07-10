@@ -15,7 +15,7 @@ import static io.github.squid233.elevator.item.EItemGroups.MAIN_GROUP;
  * @author squid233
  * @since 0.1.0
  */
-public class EItems {
+public final class EItems {
     public static final Item WHITE_ELEVATOR = elevator("white", EBlocks.WHITE_ELEVATOR);
     public static final Item ORANGE_ELEVATOR = elevator("orange", EBlocks.ORANGE_ELEVATOR);
     public static final Item MAGENTA_ELEVATOR = elevator("magenta", EBlocks.MAGENTA_ELEVATOR);

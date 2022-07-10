@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier;
  * @author squid233
  * @since 0.1.0
  */
-public class EItemGroups {
+public final class EItemGroups {
     public static final ItemGroup MAIN_GROUP = FabricItemGroupBuilder.build(
         new Identifier(ElevatorMod.MOD_ID, "main"),
         () -> new ItemStack(EItems.WHITE_ELEVATOR)

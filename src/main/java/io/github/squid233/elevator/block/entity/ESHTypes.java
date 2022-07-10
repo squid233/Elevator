@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
  * @author squid233
  * @since 0.2.0
  */
-public class ESHTypes {
+public final class ESHTypes {
     public static final Identifier ELEVATOR_SCREEN_HANDLER_TYPE_ID = ElevatorScreenHandler.createSHType();
     public static ScreenHandlerType<ElevatorScreenHandler> ELEVATOR_SCREEN_HANDLER_TYPE;
 

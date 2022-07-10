@@ -7,7 +7,7 @@ import net.minecraft.text.Text;
  * @author squid233
  * @since 0.2.0
  */
-class FunctionalCheckbox extends CheckboxWidget {
+final class FunctionalCheckbox extends CheckboxWidget {
     private final Toggleable onPress;
 
     FunctionalCheckbox(int x, int y, int width, int height, Text message, boolean checked, Toggleable onPress) {

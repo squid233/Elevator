@@ -12,7 +12,7 @@ import java.util.HashSet;
  * @author squid233
  * @since 0.2.0
  */
-class FacingControllerWrapper {
+final class FacingControllerWrapper {
     private final HashSet<FacingButton> bakedButtons = new HashSet<>();
     private final ArrayList<Point> slots = new ArrayList<>();
 

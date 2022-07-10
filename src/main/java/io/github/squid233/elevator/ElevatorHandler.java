@@ -16,7 +16,7 @@ import static java.lang.Math.abs;
  * @author squid233
  * @since 0.1.0
  */
-public class ElevatorHandler {
+public final class ElevatorHandler {
     public static void tryTeleport(ClientPlayerEntity player, Direction facing) {
         var world = player.getWorld();
 

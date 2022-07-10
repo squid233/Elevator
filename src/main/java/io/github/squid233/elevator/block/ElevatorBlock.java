@@ -30,7 +30,7 @@ import static net.minecraft.block.Blocks.IRON_BLOCK;
  * @since 0.1.0
  */
 @SuppressWarnings("deprecation")
-public class ElevatorBlock extends HorizontalFacingBlock implements BlockEntityProvider {
+public final class ElevatorBlock extends HorizontalFacingBlock implements BlockEntityProvider {
     public static final BooleanProperty DIRECTIONAL = BooleanProperty.of("directional");
     public static final BooleanProperty SHOW_ARROW = BooleanProperty.of("show_arrow");
     public static final BooleanProperty CAMO = BooleanProperty.of("camo");

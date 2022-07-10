@@ -27,7 +27,7 @@ import static net.minecraft.server.command.CommandManager.literal;
  * @author squid233
  * @since 0.1.0
  */
-public class ElevatorMod implements ModInitializer {
+public final class ElevatorMod implements ModInitializer {
     public static final String MOD_ID = "elevator233";
     public static final Logger LOGGER = LoggerFactory.getLogger("ElevatorMod");
 

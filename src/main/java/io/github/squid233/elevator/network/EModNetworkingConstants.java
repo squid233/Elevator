@@ -7,7 +7,7 @@ import net.minecraft.util.Identifier;
  * @author squid233
  * @since 0.1.0
  */
-public class EModNetworkingConstants {
+public final class EModNetworkingConstants {
     public static final Identifier TELEPORT_PACKET_ID =
         new Identifier(ElevatorMod.MOD_ID, "teleport");
     public static final Identifier SET_FACING_PACKET_ID =

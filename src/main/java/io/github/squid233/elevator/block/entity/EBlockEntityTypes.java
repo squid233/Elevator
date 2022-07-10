@@ -10,7 +10,7 @@ import net.minecraft.util.registry.Registry;
  * @author squid233
  * @since 0.2.0
  */
-public class EBlockEntityTypes {
+public final class EBlockEntityTypes {
     public static final BlockEntityType<ElevatorBlockEntity> ELEVATOR_BLOCK_ENTITY = Registry.register(
         Registry.BLOCK_ENTITY_TYPE,
         new Identifier(ElevatorMod.MOD_ID, "elevator_block_entity"),

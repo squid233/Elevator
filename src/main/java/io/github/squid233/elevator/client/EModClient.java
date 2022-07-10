@@ -20,7 +20,7 @@ import static io.github.squid233.elevator.block.entity.EBlockEntityTypes.ELEVATO
  * @author squid233
  * @since 0.1.0
  */
-public class EModClient implements ClientModInitializer {
+public final class EModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ESHTypes.registerClient();

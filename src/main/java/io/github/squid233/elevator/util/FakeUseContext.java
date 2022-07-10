@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
  * @author squid233
  * @since 0.2.0
  */
-public class FakeUseContext extends ItemPlacementContext {
+public final class FakeUseContext extends ItemPlacementContext {
     public FakeUseContext(PlayerEntity player, Hand hand, BlockHitResult hitResult) {
         super(new ItemUsageContext(player, hand, hitResult));
     }
